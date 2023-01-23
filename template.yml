@@ -108,6 +108,11 @@ Resources:
 
   BucketLambdaArtifact:
     Type: AWS::S3::Bucket
+    Properties:
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: 7
+            Status: Enabled
 
 Outputs:
   RoleArnGitHubActions:
