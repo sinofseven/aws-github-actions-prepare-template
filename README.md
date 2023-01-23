@@ -15,10 +15,9 @@ The following three resources are to be created.
 - sam-cli
 
 ## How To
-1. edit template.yml
-   - Edit L20 to limit the repositories that can touch your AWS environment with GitHub Actions
 1. edit Makefile
-   - Specify the CloudFormation Stack name in L3
+   - Specify the CloudFormation Stack name at L3
+   - Specify the GitHub Repository Prefix at L9
 1. exec deploy
    - Execute `make deploy` to create a Stack
 1. check resources
