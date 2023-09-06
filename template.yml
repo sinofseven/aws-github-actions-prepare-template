@@ -117,9 +117,6 @@ Resources:
             Status: Enabled
 
 Outputs:
-  RoleArnGitHubActions:
-    Value: !GetAtt RoleGitHubActions.Arn
-
   BucketNameLambdaArtifact:
     Value: !Ref BucketLambdaArtifact
 
