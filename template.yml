@@ -7,8 +7,10 @@ Resources:
     Type: AWS::IAM::OIDCProvider
     Properties:
       Url: https://token.actions.githubusercontent.com
-      ClientIdList: [ sts.amazonaws.com ]
-      ThumbprintList: [ 6938fd4d98bab03faadb97b34396831e3780aea1 ]
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 1b511abead59c6ce207077c0bf0e0043b1382612
 
   RoleGitHubActionsCloudFormationDeploy:
     Type: AWS::IAM::Role
@@ -106,6 +108,22 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
 
+  RoleGithubActionsAdministrator:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Ref OidcProviderGitHub
+            Condition:
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${PrefixGitHubRepository}
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
   BucketLambdaArtifact:
     Type: AWS::S3::Bucket
     Properties:
@@ -113,6 +131,9 @@ Resources:
         Rules:
           - ExpirationInDays: 7
             Status: Enabled
+
+  BucketTerraformStates:
+    Type: AWS::S3::Bucket
 
 Outputs:
   RoleArnGitHubActions:
@@ -130,3 +151,8 @@ Outputs:
   RoleArnCloudFormationDeploy:
     Value: !GetAtt RoleCloudFormationDeploy.Arn
 
+  RoleArnGithubActionsAdministrator:
+    Value: !GetAtt RoleGithubActionsAdministrator.Arn
+
+  BucketNameTerraformStates:
+    Value: !Ref BucketTerraformStates
